@@ -1,16 +1,50 @@
-# Compiled class file
+# =========================================================
+# Segredos e variáveis de ambiente (NUNCA devem subir)
+# =========================================================
+.env
+.env.*
+*.env
+!.env.example
+!.env.sample
+!.env.template
+
+# Chaves, certificados e keystores
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.truststore
+*.crt
+*.cer
+*.der
+id_rsa*
+id_ed25519*
+
+# Credenciais e configs locais
+secrets/
+.secrets/
+*.secret
+*credentials*.json
+service-account*.json
+application-local.*
+application-secret*.*
+*.local.properties
+local.properties
+.npmrc
+.pypirc
+.netrc
+
+# =========================================================
+# Java / JVM
+# =========================================================
 *.class
-
-# Log file
 *.log
-
-# BlueJ files
 *.ctxt
-
-# Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
-# Package Files #
+# Pacotes
 *.jar
 *.war
 *.nar
@@ -18,7 +52,106 @@
 *.zip
 *.tar.gz
 *.rar
+!gradle/wrapper/gradle-wrapper.jar
+!.mvn/wrapper/maven-wrapper.jar
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+# Crash logs da JVM
 hs_err_pid*
 replay_pid*
+
+# =========================================================
+# Build tools
+# =========================================================
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.properties
+!**/src/**/build/
+
+# Kotlin
+.kotlin/
+
+# Saídas genéricas
+out/
+bin/
+dist/
+logs/
+tmp/
+temp/
+coverage/
+
+# =========================================================
+# IDEs e editores
+# =========================================================
+# JetBrains (IntelliJ, PyCharm, WebStorm, Rider, etc.)
+.idea/
+*.iml
+*.ipr
+*.iws
+.fleet/
+
+# VS Code
+.vscode/
+*.code-workspace
+.history/
+
+# Eclipse
+.project
+.classpath
+.settings/
+.metadata/
+.factorypath
+.apt_generated/
+.recommenders/
+
+# NetBeans
+nbproject/private/
+nbbuild/
+nbdist/
+.nb-gradle/
+
+# Visual Studio
+.vs/
+
+# Vim / Emacs / Sublime
+*.swp
+*.swo
+*~
+\#*\#
+.\#*
+*.sublime-project
+*.sublime-workspace
+
+# Cursor / Zed
+.cursor/
+.zed/
+
+# =========================================================
+# Sistema operacional
+# =========================================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+.directory
+.Trash-*
