@@ -5,6 +5,7 @@
 - [HU01 — Representar valores monetários](#hu01)
 - [HU02 — Somar, subtrair e comparar valores](#hu02)
 - [HU03 — Ratear um valor sem perder centavos](#hu03)
+- [HU03.1 — Ratear um valor por pesos](#hu03.1)
 - [HU04 — Aplicar percentual com regra de arredondamento](#hu04)
 - [HU05 — Abrir conta](#hu05)
 - [HU06 — Bloquear e desbloquear conta](#hu06)
@@ -84,7 +85,38 @@
 - [x] Dado qualquer valor, quando divido em zero ou menos partes, então a operação é rejeitada.
 
 > Entrgue em: `PR #3`
-  
+
+<a id="hu03.1"></a>
+
+## HU03.1 — Ratear um valor por pesos
+
+> **Como** operadora do backoffice,
+> **quero** dividir um valor em partes proporcionais a pesos que eu informo,
+> **para** que rateios desiguais também nunca percam nem criem centavos.
+
+### Regras
+
+- **RDD09** ao ratear um Dinheiro por pesos, cada parte é proporcional ao seu peso, e a soma das partes é exatamente igual ao original;
+- **RDD10** os pesos são números inteiros livres: não precisam somar 100 (3/1/1 equivale a 60/20/20);
+- **RDD11** é obrigatório informar pelo menos um peso, nenhum peso pode ser negativo e a soma dos pesos deve ser maior que zero;
+- **RDD12** uma parte com peso zero recebe 0,00;
+- **RDD13** quando a divisão não for exata, os centavos que sobram vão, um por parte, para as primeiras partes.
+
+### Critérios de aceite
+
+- [ ] Dado 100,00 BRL e pesos 3/1/1, quando rateio, então recebo 60,00 · 20,00 · 20,00
+- [ ] Dado 100,00 BRL e pesos 50/25/25, quando rateio, então recebo 50,00 · 25,00 · 25,00
+- [ ] Dado 0,05 BRL e pesos 70/30, quando rateio, então recebo 0,04 · 0,01
+- [ ] Dado 100,00 BRL e pesos 1/1/1, quando rateio, então recebo 33,34 · 33,33 · 33,33, o mesmo resultado de dividir em 3 partes iguais
+- [ ] Dado −100,00 BRL e pesos 3/1/1, quando rateio, então recebo −60,00 · −20,00 · −20,00
+- [ ] Dado 100,00 BRL e pesos 3/0/1, quando rateio, então recebo 75,00 · 0,00 · 25,00
+- [ ] Dado nenhum peso, quando rateio, então a operação é rejeitada
+- [ ] Dado algum peso negativo, quando rateio, então a operação é rejeitada
+- [ ] Dado pesos 0/0/0, quando rateio, então a operação é rejeitada
+- [ ] Dado qualquer valor e quaisquer pesos válidos, quando rateio, então a soma das partes é igual ao original
+
+> Entrgue em: ``
+
 <a id="hu04"></a>
 
 ## HU04 — Aplicar percentual com regra de arredondamento
@@ -103,6 +135,8 @@
 - [ ] Dado 10% de 10,05 BRL, quando aplico com arredondamento meio para cima, então o resultado é 1,01.
 - [ ] Dado 10% de 10,05 BRL, quando aplico com arredondamento meio para o par, então o resultado é 1,00.
 - [ ] Dado qualquer percentual, quando não informo a regra de arredondamento, então a operação é rejeitada.
+
+> Entrgue em: ``
 
 <a id="hu05"></a>
 
