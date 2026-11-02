@@ -22,4 +22,42 @@ public record Money(BigDecimal valor, Moeda moeda) {
         return new Money(new BigDecimal(valor), moeda);
     }
 
+    public Money somar(Money outro) {
+        exigirMesmaMoeda(outro);
+        return new Money(valor.add(outro.valor), moeda);
+    }
+
+    public Money subtrair(Money outro) {
+        exigirMesmaMoeda(outro);
+        return new Money(valor.subtract(outro.valor), moeda);
+    }
+
+    public boolean isMaiorQue(Money outro) {
+        exigirMesmaMoeda(outro);
+        return valor.compareTo(outro.valor) > 0;
+    }
+
+    public boolean isMenorQue(Money outro) {
+        exigirMesmaMoeda(outro);
+        return valor.compareTo(outro.valor) < 0;
+    }
+
+    public boolean isPositivo() {
+        return valor.compareTo(BigDecimal.ZERO) > 0;
+    }
+
+    public boolean isNegativo() {
+        return valor.compareTo(BigDecimal.ZERO) < 0;
+    }
+
+    public boolean isZero() {
+        return valor.compareTo(BigDecimal.ZERO) == 0;
+    }
+
+    private void exigirMesmaMoeda(Money outro) {
+        Objects.requireNonNull(outro, "Outro valor é obrigatório");
+        if (moeda != outro.moeda) {
+            throw new IllegalArgumentException("Moedas diferentes: " + moeda + " e " + outro.moeda);
+        }
+    }
 }
