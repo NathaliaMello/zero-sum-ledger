@@ -39,6 +39,8 @@
 - [x] Dado 10,0 BRL e 10,00 BRL, quando comparo os dois, então são iguais e têm o mesmo hash.
 - [x] Dado 10,00 BRL e 10,00 USD, quando comparo os dois, então são diferentes.
 
+- Entrgue em: `PR #1` 
+
 <a id="hu02"></a>
 
 ## HU02 — Somar, subtrair e comparar valores
@@ -54,11 +56,13 @@
 
 ### Critérios de aceite
 
-- [ ] Dado 10,00 BRL e 5,50 BRL, quando somo, então o resultado é 15,50 BRL.
-- [ ] Dado 10,00 BRL e 15,00 BRL, quando subtraio o segundo do primeiro, então o resultado é −5,00 BRL.
-- [ ] Dado 10,00 BRL e 5,00 BRL, quando comparo, então o primeiro é maior.
-- [ ] Dado 10,00 BRL e 5,00 USD, quando somo, subtraio ou comparo, então a operação é rejeitada.
-- [ ] Dado 10,00 BRL, quando somo 5,00 BRL a ele, então o Dinheiro original continua valendo 10,00.
+- [x] Dado 10,00 BRL e 5,50 BRL, quando somo, então o resultado é 15,50 BRL.
+- [x] Dado 10,00 BRL e 15,00 BRL, quando subtraio o segundo do primeiro, então o resultado é −5,00 BRL.
+- [x] Dado 10,00 BRL e 5,00 BRL, quando comparo, então o primeiro é maior.
+- [x] Dado 10,00 BRL e 5,00 USD, quando somo, subtraio ou comparo, então a operação é rejeitada.
+- [x] Dado 10,00 BRL, quando somo 5,00 BRL a ele, então o Dinheiro original continua valendo 10,00.
+
+- Entrgue em: `PR #2` 
 
 <a id="hu03"></a>
 
