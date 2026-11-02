@@ -3,6 +3,7 @@ package com.mello.nathalia.zerosum.ledger.domain.money;
 import com.mello.nathalia.zerosum.ledger.domain.enuns.Moeda;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -39,20 +40,44 @@ public record Money(BigDecimal valor, Moeda moeda) {
             throw new IllegalArgumentException("Número de partes deve ser maior que zero");
         }
 
+        int[] pesos = new int[partes];
+        Arrays.fill(pesos, 1);
+        return ratear(pesos);
+    }
+
+    public List<Money> ratear(int... pesos) {
+
+        validarPesos(pesos);
+
         long centavos = valor.unscaledValue().longValueExact();
         long sinal = Long.signum(centavos);
         long absoluto = Math.abs(centavos);
-        long base = absoluto / partes;
-        long resto = absoluto % partes;
+        long somaPesos = Arrays.stream(pesos).asLongStream().sum();
+
+        long[] fatias = new long[pesos.length];
+        long distribuido = 0;
+
+        for (int i = 0; i < pesos.length; i++) {
+            fatias[i] = absoluto * pesos[i] / somaPesos;
+            distribuido += fatias[i];
+        }
+
+        long sobra = absoluto - distribuido;
+        for (int i = 0; i < pesos.length && sobra > 0; i++) {
+            if (pesos[i] > 0) {
+                fatias[i]++;
+                sobra--;
+            }
+        }
 
         List<Money> resultado = new ArrayList<>();
-        for (int i = 0; i < partes; i++) {
-            long centavosDaParte = sinal * (base + (i < resto ? 1 : 0));
-            resultado.add(new Money(BigDecimal.valueOf(centavosDaParte, 2), moeda));
+        for (long fatia: fatias) {
+            resultado.add(new Money(BigDecimal.valueOf(sinal * fatia, 2), moeda));
         }
 
         return List.copyOf(resultado);
     }
+
 
     public boolean isMaiorQue(Money outro) {
         exigirMesmaMoeda(outro);
@@ -80,6 +105,22 @@ public record Money(BigDecimal valor, Moeda moeda) {
         Objects.requireNonNull(outro, "Outro valor é obrigatório");
         if (moeda != outro.moeda) {
             throw new IllegalArgumentException("Moedas diferentes: " + moeda + " e " + outro.moeda);
+        }
+    }
+
+    private void validarPesos(int... pesos) {
+        Objects.requireNonNull(pesos, "Pesos não podem ser nulos");
+
+        if(pesos.length == 0) {
+            throw new IllegalArgumentException("Pesos não podem ser vazios");
+        }
+
+        if(Arrays.stream(pesos).anyMatch(peso -> peso < 0)) {
+            throw new IllegalArgumentException("Peso não pode ser negativo");
+        }
+
+        if (Arrays.stream(pesos).asLongStream().sum() == 0) {
+            throw new IllegalArgumentException("Soma dos pesos deve ser maior que zero");
         }
     }
 }

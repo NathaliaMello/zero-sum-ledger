@@ -2,13 +2,32 @@ package com.mello.nathalia.zerosum.ledger.domain.money;
 
 import com.mello.nathalia.zerosum.ledger.domain.enuns.Moeda;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 class MoneyTest {
+
+    static Stream<Arguments> cenariosDeRateio() {
+        return Stream.of(
+                arguments("100.00", new int[] {3, 1, 1},   List.of("60.00", "20.00", "20.00")),
+                arguments("100.00", new int[] {50, 25, 25}, List.of("50.00", "25.00", "25.00")),
+                arguments("100.00", new int[] {1, 1, 1},   List.of("33.34", "33.33", "33.33")),
+                arguments("100.00", new int[] {3, 0, 1},   List.of("75.00", "0.00", "25.00")),
+                arguments("0.05",   new int[] {70, 30},    List.of("0.04", "0.01")),
+                arguments("0.05",   new int[] {0, 1, 1},   List.of("0.00", "0.03", "0.02")),
+                arguments("-100.00", new int[] {3, 1, 1},  List.of("-60.00", "-20.00", "-20.00")),
+                arguments("-100.00", new int[] {1, 1, 1},  List.of("-33.34", "-33.33", "-33.33"))
+        );
+    }
 
     @Test
     void novoDinheiroSempreTeraDuasCasasDecimais() {
@@ -259,7 +278,6 @@ class MoneyTest {
     @Test
     void somaDasPartesEhIgualAoOriginal() {
         var original = Money.of("100.00", Moeda.BRL);
-
         var soma = original.alocar(3).stream()
                 .reduce(Money.of("0", Moeda.BRL), Money::somar);
 
@@ -269,7 +287,6 @@ class MoneyTest {
     @Test
     void listaDePartesEhImutavel() {
         var original = Money.of("100.00", Moeda.BRL);
-
         var partes = original.alocar(3);
         assertThatThrownBy(() -> partes.add(Money.of("1.00", Moeda.BRL)))
                 .isInstanceOf(UnsupportedOperationException.class);
@@ -279,6 +296,55 @@ class MoneyTest {
 
         assertThatThrownBy(() -> partes.set(0, Money.of("50.00", Moeda.BRL)))
                 .isInstanceOf(UnsupportedOperationException.class);
+    }
+
+    @ParameterizedTest(name = "{0} com pesos {1} -> {2}")
+    @MethodSource("cenariosDeRateio")
+    void ratearComValoresEPesosDiferentes(String valor, int[] pesos, List<String> esperado) {
+        var original = Money.of(valor, Moeda.BRL);
+        var partes = original.ratear(pesos);
+
+        assertThat(partes).containsExactlyElementsOf(
+                esperado.stream()
+                        .map(v -> Money.of(v, Moeda.BRL))
+                        .toList());
+
+        assertThat(partes.stream()
+                .reduce(Money.of("0.00", Moeda.BRL), Money::somar))
+                .isEqualTo(original);
+
+    }
+
+    @Test
+    void rejeitarRateioComPesoNulo() {
+        var original = Money.of("100.00", Moeda.BRL);
+        assertThatThrownBy(() -> original.ratear(null))
+                .isInstanceOf(NullPointerException.class)
+                .hasMessage("Pesos não podem ser nulos");
+    }
+
+    @Test
+    void rejeitarRateioComPesoVazio() {
+        var original = Money.of("100.00", Moeda.BRL);
+        assertThatThrownBy(() -> original.ratear())
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Pesos não podem ser vazios");
+    }
+
+    @Test
+    void rejeitarRateioComSomaDosPesosIgualZero() {
+        var original = Money.of("100.00", Moeda.BRL);
+        assertThatThrownBy(() -> original.ratear(0, 0))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Soma dos pesos deve ser maior que zero");
+    }
+
+    @Test
+    void rejeitarRateioCompesoNegativo() {
+        var original = Money.of("100.00", Moeda.BRL);
+        assertThatThrownBy(() -> original.ratear(2, -1))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Peso não pode ser negativo");
     }
 
 }
