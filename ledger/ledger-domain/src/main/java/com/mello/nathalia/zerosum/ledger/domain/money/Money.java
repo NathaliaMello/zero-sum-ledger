@@ -2,6 +2,8 @@ package com.mello.nathalia.zerosum.ledger.domain.money;
 
 import com.mello.nathalia.zerosum.ledger.domain.enuns.Moeda;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public record Money(BigDecimal valor, Moeda moeda) {
@@ -30,6 +32,26 @@ public record Money(BigDecimal valor, Moeda moeda) {
     public Money subtrair(Money outro) {
         exigirMesmaMoeda(outro);
         return new Money(valor.subtract(outro.valor), moeda);
+    }
+
+    public List<Money> alocar(int partes) {
+        if (partes <= 0) {
+            throw new IllegalArgumentException("Número de partes deve ser maior que zero");
+        }
+
+        long centavos = valor.unscaledValue().longValueExact();
+        long sinal = Long.signum(centavos);
+        long absoluto = Math.abs(centavos);
+        long base = absoluto / partes;
+        long resto = absoluto % partes;
+
+        List<Money> resultado = new ArrayList<>();
+        for (int i = 0; i < partes; i++) {
+            long centavosDaParte = sinal * (base + (i < resto ? 1 : 0));
+            resultado.add(new Money(BigDecimal.valueOf(centavosDaParte, 2), moeda));
+        }
+
+        return List.copyOf(resultado);
     }
 
     public boolean isMaiorQue(Money outro) {

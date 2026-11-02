@@ -5,8 +5,8 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class MoneyTest {
 
@@ -182,4 +182,103 @@ class MoneyTest {
         assertThat(money1.valor()).isEqualTo(new BigDecimal("10.00"));
         assertThat(money2.valor()).isEqualTo(new BigDecimal("10.00"));
     }
+
+    @Test
+    void alocar100PositivoCorretamentePara3Partes() {
+        var money = Money.of("100.00", Moeda.BRL);
+        var partes = money.alocar(3);
+
+        assertThat(partes).containsExactly(
+                Money.of("33.34", Moeda.BRL),
+                Money.of("33.33", Moeda.BRL),
+                Money.of("33.33", Moeda.BRL)
+        );
+
+    }
+
+    @Test
+    void alocar100NegativoCorretamentePara3Partes() {
+        var money = Money.of("-100.00", Moeda.BRL);
+        var partes = money.alocar(3);
+
+        assertThat(partes).containsExactly(
+                Money.of("-33.34", Moeda.BRL),
+                Money.of("-33.33", Moeda.BRL),
+                Money.of("-33.33", Moeda.BRL)
+        );
+
+    }
+
+    @Test
+    void alocar0CorretamentePara3Partes() {
+        var money = Money.of("0", Moeda.BRL);
+        var partes = money.alocar(3);
+
+        assertThat(partes).containsExactly(
+                Money.of("0.00", Moeda.BRL),
+                Money.of("0.00", Moeda.BRL),
+                Money.of("0.00", Moeda.BRL)
+        );
+    }
+
+    @Test
+    void alocar100CorretamentePara4Partes() {
+        var money = Money.of("100.00", Moeda.BRL);
+        var partes = money.alocar(4);
+
+        assertThat(partes.size()).isEqualTo(4);
+        assertThat(partes.get(0).valor()).isEqualTo(new BigDecimal("25.00"));
+        assertThat(partes.get(1).valor()).isEqualTo(new BigDecimal("25.00"));
+        assertThat(partes.get(2).valor()).isEqualTo(new BigDecimal("25.00"));
+        assertThat(partes.get(3).valor()).isEqualTo(new BigDecimal("25.00"));
+    }
+
+    @Test
+    void alocar1CentavoCorretamentePara3Partes() {
+        var money = Money.of("0.01", Moeda.BRL);
+        var partes = money.alocar(3);
+
+        assertThat(partes.size()).isEqualTo(3);
+        assertThat(partes.get(0).valor()).isEqualTo(new BigDecimal("0.01"));
+        assertThat(partes.get(1).valor()).isEqualTo(new BigDecimal("0.00"));
+        assertThat(partes.get(2).valor()).isEqualTo(new BigDecimal("0.00"));
+    }
+
+    @Test
+    void rejeitarAlocacaoDeDinheiroParaQuantidadeInvalida() {
+        var money = Money.of("100.00", Moeda.BRL);
+        assertThatThrownBy(() -> money.alocar(0))
+            .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Número de partes deve ser maior que zero");
+
+        assertThatThrownBy(() -> money.alocar(-1))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Número de partes deve ser maior que zero");
+    }
+
+    @Test
+    void somaDasPartesEhIgualAoOriginal() {
+        var original = Money.of("100.00", Moeda.BRL);
+
+        var soma = original.alocar(3).stream()
+                .reduce(Money.of("0", Moeda.BRL), Money::somar);
+
+        assertThat(soma).isEqualTo(original);
+    }
+
+    @Test
+    void listaDePartesEhImutavel() {
+        var original = Money.of("100.00", Moeda.BRL);
+
+        var partes = original.alocar(3);
+        assertThatThrownBy(() -> partes.add(Money.of("1.00", Moeda.BRL)))
+                .isInstanceOf(UnsupportedOperationException.class);
+
+        assertThatThrownBy(() -> partes.removeFirst())
+                .isInstanceOf(UnsupportedOperationException.class);
+
+        assertThatThrownBy(() -> partes.set(0, Money.of("50.00", Moeda.BRL)))
+                .isInstanceOf(UnsupportedOperationException.class);
+    }
+
 }
