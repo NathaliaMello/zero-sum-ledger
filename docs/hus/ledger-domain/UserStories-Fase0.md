@@ -78,10 +78,10 @@
 
 ### Critérios de aceite
 
-- [ ] Dado 100,00 BRL, quando divido em 3 partes, então recebo 33,34, 33,33 e 33,33, somando 100,00.
-- [ ] Dado 100,00 BRL, quando divido em 4 partes, então recebo quatro partes de 25,00.
-- [ ] Dado 0,01 BRL, quando divido em 3 partes, então recebo 0,01, 0,00 e 0,00.
-- [ ] Dado qualquer valor, quando divido em zero ou menos partes, então a operação é rejeitada.
+- [x] Dado 100,00 BRL, quando divido em 3 partes, então recebo 33,34, 33,33 e 33,33, somando 100,00.
+- [x] Dado 100,00 BRL, quando divido em 4 partes, então recebo quatro partes de 25,00.
+- [x] Dado 0,01 BRL, quando divido em 3 partes, então recebo 0,01, 0,00 e 0,00.
+- [x] Dado qualquer valor, quando divido em zero ou menos partes, então a operação é rejeitada.
 
 > Entrgue em: `PR #3`
   
