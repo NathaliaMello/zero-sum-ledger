@@ -104,18 +104,18 @@
 
 ### Critérios de aceite
 
-- [ ] Dado 100,00 BRL e pesos 3/1/1, quando rateio, então recebo 60,00 · 20,00 · 20,00
-- [ ] Dado 100,00 BRL e pesos 50/25/25, quando rateio, então recebo 50,00 · 25,00 · 25,00
-- [ ] Dado 0,05 BRL e pesos 70/30, quando rateio, então recebo 0,04 · 0,01
-- [ ] Dado 100,00 BRL e pesos 1/1/1, quando rateio, então recebo 33,34 · 33,33 · 33,33, o mesmo resultado de dividir em 3 partes iguais
-- [ ] Dado −100,00 BRL e pesos 3/1/1, quando rateio, então recebo −60,00 · −20,00 · −20,00
-- [ ] Dado 100,00 BRL e pesos 3/0/1, quando rateio, então recebo 75,00 · 0,00 · 25,00
-- [ ] Dado nenhum peso, quando rateio, então a operação é rejeitada
-- [ ] Dado algum peso negativo, quando rateio, então a operação é rejeitada
-- [ ] Dado pesos 0/0/0, quando rateio, então a operação é rejeitada
-- [ ] Dado qualquer valor e quaisquer pesos válidos, quando rateio, então a soma das partes é igual ao original
+- [x] Dado 100,00 BRL e pesos 3/1/1, quando rateio, então recebo 60,00 · 20,00 · 20,00
+- [x] Dado 100,00 BRL e pesos 50/25/25, quando rateio, então recebo 50,00 · 25,00 · 25,00
+- [x] Dado 0,05 BRL e pesos 70/30, quando rateio, então recebo 0,04 · 0,01
+- [x] Dado 100,00 BRL e pesos 1/1/1, quando rateio, então recebo 33,34 · 33,33 · 33,33, o mesmo resultado de dividir em 3 partes iguais
+- [x] Dado −100,00 BRL e pesos 3/1/1, quando rateio, então recebo −60,00 · −20,00 · −20,00
+- [x] Dado 100,00 BRL e pesos 3/0/1, quando rateio, então recebo 75,00 · 0,00 · 25,00
+- [x] Dado nenhum peso, quando rateio, então a operação é rejeitada
+- [x] Dado algum peso negativo, quando rateio, então a operação é rejeitada
+- [x] Dado pesos 0/0/0, quando rateio, então a operação é rejeitada
+- [x] Dado qualquer valor e quaisquer pesos válidos, quando rateio, então a soma das partes é igual ao original
 
-> Entrgue em: ``
+> Entrgue em: `RP#5`
 
 <a id="hu04"></a>
 
