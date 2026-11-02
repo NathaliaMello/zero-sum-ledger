@@ -39,7 +39,7 @@
 - [x] Dado 10,0 BRL e 10,00 BRL, quando comparo os dois, então são iguais e têm o mesmo hash.
 - [x] Dado 10,00 BRL e 10,00 USD, quando comparo os dois, então são diferentes.
 
-- Entrgue em: `PR #1` 
+> Entrgue em: `PR #1` 
 
 <a id="hu02"></a>
 
@@ -62,7 +62,7 @@
 - [x] Dado 10,00 BRL e 5,00 USD, quando somo, subtraio ou comparo, então a operação é rejeitada.
 - [x] Dado 10,00 BRL, quando somo 5,00 BRL a ele, então o Dinheiro original continua valendo 10,00.
 
-- Entrgue em: `PR #2` 
+> Entrgue em: `PR #2` 
 
 <a id="hu03"></a>
 
@@ -83,6 +83,8 @@
 - [ ] Dado 0,01 BRL, quando divido em 3 partes, então recebo 0,01, 0,00 e 0,00.
 - [ ] Dado qualquer valor, quando divido em zero ou menos partes, então a operação é rejeitada.
 
+> Entrgue em: `PR #3`
+  
 <a id="hu04"></a>
 
 ## HU04 — Aplicar percentual com regra de arredondamento
