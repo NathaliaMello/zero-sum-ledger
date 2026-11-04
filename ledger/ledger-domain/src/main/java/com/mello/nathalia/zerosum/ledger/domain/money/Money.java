@@ -2,6 +2,7 @@ package com.mello.nathalia.zerosum.ledger.domain.money;
 
 import com.mello.nathalia.zerosum.ledger.domain.enuns.Moeda;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -78,6 +79,13 @@ public record Money(BigDecimal valor, Moeda moeda) {
         return List.copyOf(resultado);
     }
 
+    public Money aplicarPercentual(BigDecimal percentual, RoundingMode modo) {
+        Objects.requireNonNull(percentual, "Percentual é obrigatório");
+        Objects.requireNonNull(modo, "Regra de arredondamento é obrigatória");
+
+        BigDecimal bruto = valor.multiply(percentual).movePointLeft(2);
+        return new Money(bruto.setScale(2, modo), moeda);
+    }
 
     public boolean isMaiorQue(Money outro) {
         exigirMesmaMoeda(outro);
