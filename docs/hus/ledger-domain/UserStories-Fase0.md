@@ -131,12 +131,12 @@
 
 ### Critérios de aceite
 
-- [ ] Dado 10% de 10,05 BRL (1,005), quando aplico com truncamento, então o resultado é 1,00.
-- [ ] Dado 10% de 10,05 BRL, quando aplico com arredondamento meio para cima, então o resultado é 1,01.
-- [ ] Dado 10% de 10,05 BRL, quando aplico com arredondamento meio para o par, então o resultado é 1,00.
-- [ ] Dado qualquer percentual, quando não informo a regra de arredondamento, então a operação é rejeitada.
+- [x] Dado 10% de 10,05 BRL (1,005), quando aplico com truncamento, então o resultado é 1,00.
+- [x] Dado 10% de 10,05 BRL, quando aplico com arredondamento meio para cima, então o resultado é 1,01.
+- [x] Dado 10% de 10,05 BRL, quando aplico com arredondamento meio para o par, então o resultado é 1,00.
+- [x] Dado qualquer percentual, quando não informo a regra de arredondamento, então a operação é rejeitada.
 
-> Entrgue em: ``
+> Entrgue em: `PR#6`
 
 <a id="hu05"></a>
 
