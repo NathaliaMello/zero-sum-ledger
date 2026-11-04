@@ -4,9 +4,11 @@ import com.mello.nathalia.zerosum.ledger.domain.enuns.Moeda;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -345,6 +347,49 @@ class MoneyTest {
         assertThatThrownBy(() -> original.ratear(2, -1))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Peso não pode ser negativo");
+    }
+
+    @ParameterizedTest(name = "{1}% de {0} com {2} -> {3}")
+    @CsvSource({
+            "10.01, 10, UP, 1.01",
+            "10.01, 10, DOWN, 1.00",
+            "10.01, 10, HALF_UP, 1.00",
+            "10.01, 10, HALF_EVEN, 1.00",
+            "10.05, 10, DOWN,      1.00",
+            "10.05, 10, HALF_UP,   1.01",
+            "10.15, 10, HALF_EVEN, 1.02",
+            "10.15, 10, UP, 1.02",
+            "-10.01, 10, UP, -1.01",
+            "-10.01, 10, CEILING, -1.00",
+            "-10.01, 10, HALF_UP, -1.00",
+            "-10.01, 10, HALF_EVEN, -1.00",
+            "100.00, 2.5, HALF_EVEN, 2.50",
+            "100.00, 100, HALF_EVEN, 100.00",
+            "10.05,  0,   HALF_EVEN, 0.00",
+    })
+    void aplicaPercentualConformeORegraDeArredondamento(String valor, BigDecimal percentual, RoundingMode modo, String esperado) {
+        var original = Money.of(valor, Moeda.BRL);
+        var resultado = original.aplicarPercentual(percentual, modo);
+        assertThat(resultado).isEqualTo(Money.of(esperado, Moeda.BRL));
+    }
+
+    @Test
+    void aplicarPercentualSemPercentual() {
+        var money = Money.of("10.05", Moeda.BRL);
+
+        assertThatThrownBy(() -> money.aplicarPercentual(null, RoundingMode.HALF_EVEN))
+                .isInstanceOf(NullPointerException.class)
+                .hasMessage("Percentual é obrigatório");
+    }
+
+    @Test
+    void aplicarPercentualSemRegraDeArredondamento() {
+        var money = Money.of("10.05", Moeda.BRL);
+        var percentual = BigDecimal.valueOf(10);
+
+        assertThatThrownBy(() -> money.aplicarPercentual(percentual, null))
+                .isInstanceOf(NullPointerException.class)
+                .hasMessage("Regra de arredondamento é obrigatória");
     }
 
 }
